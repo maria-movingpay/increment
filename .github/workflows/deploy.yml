@@ -34,7 +34,6 @@ jobs:
         run: |
           mkdir build_artifacts
           cp -r build/* build_artifacts/
-          cp .env build_artifacts/
           cp package.json build_artifacts/
           cp -r node_modules build_artifacts/
       
