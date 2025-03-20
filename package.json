@@ -1,11 +1,13 @@
 {
   "name": "lambda_increment",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "build:esbuild": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outdir=build"
+    "build:esbuild": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outdir=build",
+    "start": "node build/index.js",
+    "dev": "ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",

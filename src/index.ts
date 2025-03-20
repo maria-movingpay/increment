@@ -7,7 +7,7 @@ const dynamodb = new DynamoDB.DocumentClient({
 const incrementTableName = 'increment'; // Substitua pelo nome real da tabela de incrementos
 const companyTableName = 'companies'; // Substitua pelo nome real da tabela de empresas
 
-export const handler = async (event: { Records: Array<{ eventName: string, dynamodb: { NewImage: DynamoDB.DocumentClient.AttributeMap } }> }): Promise<void> => {
+export const handler = async (event: any) => {
     console.log('Evento recebido:', JSON.stringify(event, null, 2));
     console.log('conexao: ',dynamodb)
     for (const record of event.Records) {
@@ -96,6 +96,9 @@ export const handler = async (event: { Records: Array<{ eventName: string, dynam
             //         throw err;
             //     }
             // }
+           
         }
     }
+
+    return 'Processamento concluído.';
 };

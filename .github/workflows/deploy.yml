@@ -1,0 +1,57 @@
+name: Deploy to Lambda
+
+on:
+  push:
+    branches:
+      - master  
+
+jobs:
+  deploy_source:
+    name: Build and Deploy Lambda
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies and build
+        run: |
+          yarn install
+          yarn build
+        env:
+          CI: true
+
+      - name: Prepare build artifacts
+        run: |
+          mkdir build_artifacts
+          cp -r build/* build_artifacts/
+          cp .env build_artifacts/
+          cp package.json build_artifacts/
+          cp -r node_modules build_artifacts/
+      
+      - name: Zip build artifacts
+        run: |
+          cd build_artifacts
+          zip -qq -r ../bundle.zip .
+      
+      - name: Verify zip file
+        run: |
+          ls -lh bundle.zip
+
+      - name: Deploy to AWS Lambda
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCOUNT_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_ACCOUNT_SECRET_KEY_ID }}
+          aws_region: sa-east-1
+          function_name: increment_stream
+          zip_file: bundle.zip
