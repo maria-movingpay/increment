@@ -1,18 +1,8 @@
 import { DynamoDB } from 'aws-sdk';
 
-// Tipos de dados esperados nas tabelas
-interface IncrementItem {
-  id: { S: string };
-  value: { N: string };
-}
-
-interface CompanyItem {
-  uuid: { S: string };
-  companyId: { N: string };
-  data: DynamoDB.DocumentClient.AttributeMap;
-}
-
-const dynamodb = new DynamoDB.DocumentClient();
+const dynamodb = new DynamoDB.DocumentClient({
+    region: 'sa-east-1',
+});
 
 const incrementTableName = 'increment'; // Substitua pelo nome real da tabela de incrementos
 const companyTableName = 'companies'; // Substitua pelo nome real da tabela de empresas
